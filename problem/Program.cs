@@ -17,6 +17,15 @@ namespace problem
                 n[i] = int.Parse(Console.ReadLine());
             }
 
+            for(int i = 0; i < a - 1; i++)
+            {
+                if (IsMatch(n[i].ToString(), n[i+1].ToString()))
+                {
+                    Console.WriteLine("-1");
+                    break;
+                }
+            }
+
             
         }
 
