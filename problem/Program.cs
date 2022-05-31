@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace problem
@@ -7,27 +8,78 @@ namespace problem
     {
         static void Main(string[] args)
         {
-            
-            int a = int.Parse(Console.ReadLine());
-            int[] t = new int[10];
-            t = Console.ReadLine().Split().Select(int.Parse).ToArray();
-            int[] n = new int[a];
-            for(int i = 0; i < a; i++)
-            {
-                n[i] = int.Parse(Console.ReadLine());
-            }
 
-            for(int i = 0; i < a - 1; i++)
+            //int a = int.Parse(Console.ReadLine());
+            //int[] t = new int[10];
+            //t = Console.ReadLine().Split().Select(int.Parse).ToArray();
+            //int[] n = new int[a];
+            //for(int i = 0; i < a; i++)
+            //{
+            //    n[i] = int.Parse(Console.ReadLine());
+            //}
+
+            List<string> deviceNums = new List<string>()
             {
-                if (IsMatch(n[i].ToString(), n[i+1].ToString()))
+                "9123493342",
+                "3123493942",
+                "9223433942",
+                "3223493942",
+                "9223433945"
+            };
+
+            IList<int> res = Valid(deviceNums);
+            if (res.Count != 0)
+            {
+                Console.WriteLine(res.Count);
+                foreach (int i in res)
                 {
-                    Console.WriteLine("-1");
-                    break;
+                    Console.Write(i + " ");
                 }
             }
 
-            
+
         }
+
+        public static IList<int> Valid(List<string> vs)
+        {
+            List<string> copy = new List<string>(vs);
+            List<int> order = new List<int>() { 1 };
+
+            string current = vs[0];
+            vs.Remove(current);
+
+            bool hasMatch = false;
+
+            while (true)
+            {
+                hasMatch = false;
+
+                for (int i = vs.Count - 1; i >= 0; i--)
+                {
+                    if (IsMatch(current, vs[i]))
+                    {
+                        if (i == vs.Count - 1)
+                        {
+                            order.Add(copy.Count);
+                            return order;
+                        }
+                        else
+                        {
+                            current = vs[i];
+                            order.Add(copy.FindIndex(p => p == current) + 1);
+                            vs.Remove(current);
+                            hasMatch = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!hasMatch)
+                    return new List<int>();
+            }
+
+        }
+
 
         public static bool IsMatch(string s1, string s2)
         {
